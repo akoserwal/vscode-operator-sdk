@@ -1,0 +1,104 @@
+{
+	"name": "vscode-operator-sdk",
+	"displayName": "vscode-operator-sdk",
+	"description": "Extension for operator-sdk",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"icon": "images/operator-framework.png",
+	"categories": [
+		"openshift",
+		"kubernetes",
+		"redhat",
+		"clusters",
+		"k8s",
+		"redhat",
+		"operator sdk"
+	],
+	"activationEvents": [
+		"onCommand:operatorsdk.version",
+		"onCommand:operatorsdk.new",
+		"onCommand:operatorsdk.addAPI",
+		"onCommand:operatorsdk.addController",
+		"onCommand:operatorsdk.addCRD",
+		"onCommand:operatorsdk.generateK8s",
+		"onCommand:operatorsdk.generateOpenapi",
+		"onCommand:operatorsdk.up",
+		"onCommand:operatorsdk.setpath"
+
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "operatorsdk.version",
+				"title": "Version",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.new",
+				"title": "New",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.addAPI",
+				"title": "Add API",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.addController",
+				"title": "Add Controller",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.addCRD",
+				"title": "Add CRD",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.generateK8s",
+				"title": "Generate K8s",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.generateOpenapi",
+				"title": "Generate Openapi",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.up",
+				"title": "Up",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.setpath",
+				"title": "Set Operator project path",
+				"category": "Operator-sdk" 
+			}
+
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.40.0",
+		"glob": "^7.1.5",
+		"mocha": "^6.2.2",
+		"typescript": "^3.6.4",
+		"tslint": "^5.20.0",
+		"vscode-test": "^1.2.2"
+	},
+	"dependencies": {
+		"@types/shelljs": "^0.8.6",
+		"shelljs": "^0.8.3"
+	}
+}
