@@ -25,7 +25,8 @@
 		"onCommand:operatorsdk.generateK8s",
 		"onCommand:operatorsdk.generateOpenapi",
 		"onCommand:operatorsdk.up",
-		"onCommand:operatorsdk.setpath"
+		"onCommand:operatorsdk.setpath",
+		"onCommand:operatorsdk.printdeps"
 
 	],
 	"main": "./out/extension.js",
@@ -75,6 +76,11 @@
 				"command": "operatorsdk.setpath",
 				"title": "Set Operator project path",
 				"category": "Operator-sdk" 
+			},
+			{
+				"command": "operatorsdk.printdeps",
+				"title": "print deps",
+				"category": "Operator-sdk"
 			}
 
 		]

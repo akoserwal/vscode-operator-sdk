@@ -9,6 +9,24 @@ import { Operator } from "./operator";
 
 
 export class OperatorSdk {
+
+
+    static async printDeps(printDeps: any): Promise<any> {
+        if (Operator.getInstance().path === undefined) {
+            await OperatorSdk.setOpPAth();
+        }
+        
+        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk print-deps`);
+        if (result.error !== null) {
+            vscode.window.showErrorMessage(result.stderr);
+        } else {
+            vscode.window.showInformationMessage(result.stdout);
+        }
+    
+    }
+
+
+
     static async setOperatorPath(setOperatorPath: any): Promise<any> {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();

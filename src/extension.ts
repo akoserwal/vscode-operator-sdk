@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('operatorsdk.generateOpenapi', async () => execute( await OperatorSdk.generate('openapi'))),
         vscode.commands.registerCommand('operatorsdk.up',  () => execute(OperatorSdk.up)),
         vscode.commands.registerCommand('operatorsdk.setpath',  () => execute(OperatorSdk.setOperatorPath)),
+        vscode.commands.registerCommand('operatorsdk.printdeps',  () => execute(OperatorSdk.printDeps)),
         
 	];
 
