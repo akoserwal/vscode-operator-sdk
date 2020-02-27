@@ -24,10 +24,9 @@
 		"onCommand:operatorsdk.addCRD",
 		"onCommand:operatorsdk.generateK8s",
 		"onCommand:operatorsdk.generateOpenapi",
-		"onCommand:operatorsdk.up",
+		"onCommand:operatorsdk.run",
 		"onCommand:operatorsdk.setpath",
 		"onCommand:operatorsdk.printdeps"
-
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -75,14 +74,13 @@
 			{
 				"command": "operatorsdk.setpath",
 				"title": "Set Operator project path",
-				"category": "Operator-sdk" 
+				"category": "Operator-sdk"
 			},
 			{
 				"command": "operatorsdk.printdeps",
 				"title": "print deps",
 				"category": "Operator-sdk"
 			}
-
 		]
 	},
 	"scripts": {
