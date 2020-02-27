@@ -68,8 +68,8 @@
 				"category": "Operator-sdk"
 			},
 			{
-				"command": "operatorsdk.up",
-				"title": "Up",
+				"command": "operatorsdk.run",
+				"title": "Run",
 				"category": "Operator-sdk"
 			},
 			{

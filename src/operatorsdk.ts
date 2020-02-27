@@ -34,7 +34,7 @@ export class OperatorSdk {
     }
 
 
-    static async up(up: any): Promise<any> {
+    static async run(run: any): Promise<any> {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();
         }
@@ -45,7 +45,7 @@ export class OperatorSdk {
         };
         const namespace = vscode.window.showInputBox();
 
-        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk up local --namespace=` + namespace);
+        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk run --local --namespace=` + namespace);
         //operator-sdk up local --namespace=default
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
