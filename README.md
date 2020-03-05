@@ -6,6 +6,11 @@ VS Code plugin for [operator-sdk](https://github.com/operator-framework/operator
 ![](https://media.giphy.com/media/VIDfr1mtxwfzEEIAKm/giphy.gif)
 
 
+
+# Demo
+[youtube demo](https://youtu.be/zBrvQKJFKgE)
+
+
 ## Use
 
 * `Command(Windows) + shift + P`
