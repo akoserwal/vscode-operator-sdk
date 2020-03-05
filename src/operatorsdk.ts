@@ -94,7 +94,7 @@ export class OperatorSdk {
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
         } else {
-            vscode.window.showInformationMessage("Generated:" + type + "for kind" + kind);
+            vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind);
         }
 
 
