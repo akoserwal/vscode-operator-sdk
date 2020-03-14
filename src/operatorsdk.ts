@@ -15,8 +15,8 @@ export class OperatorSdk {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();
         }
-        
-        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk print-deps`);
+        const OPSDK_PRINT_DEPS = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk print-deps`;
+        const result = await Cli.getInstance().execute(OPSDK_PRINT_DEPS);
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
         } else {
@@ -61,7 +61,8 @@ export class OperatorSdk {
             await OperatorSdk.setOpPAth();
         }
 
-        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk generate ` + type);
+        const OPSDK_GEN = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk generate ` + type;
+        const result = await Cli.getInstance().execute(OPSDK_GEN);
 
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
@@ -89,7 +90,8 @@ export class OperatorSdk {
         }];
         const kind = await vscode.window.showInputBox(options[0]);
         const version = await vscode.window.showInputBox(options[1]);
-        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind);
+        const OPSDK_ADD = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
+        const result = await Cli.getInstance().execute(OPSDK_ADD);
 
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
