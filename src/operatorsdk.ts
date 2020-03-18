@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { InputBoxOptions, Uri } from "vscode";
 import { Cli } from "./cli";
 import { Operator } from "./operator";
+import { Progress } from "./progress";
 
 
 
@@ -131,26 +132,24 @@ export class OperatorSdk {
             Operator.getInstance().name = operatorName;
         }
         const cmd = `cd ` + operatorPath + ' && ' + `operator-sdk new ` + operatorName;
-        const result = await Cli.getInstance().execute(cmd);
 
-        Operator.getInstance().path = operatorPath + operatorName;
+       Progress.execCmd("creating new operator:"+operatorName, cmd)
+       .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPath)
+       ).catch((error) => vscode.window.showErrorMessage(error)
+       );
 
-        if (result.error !== null) {
-            vscode.window.showErrorMessage(result.stderr);
-        } else {
-            vscode.window.showInformationMessage("Operator created:" + Operator.getInstance().path, ...['open'])
-                .then(async selection => {
-                    if (selection === 'open') {
-                        console.log("path:" + Operator.getInstance().path);
-                        let uri = Uri.file(Operator.getInstance().path);
-                        let suc = await vscode.commands.executeCommand('vscode.openFolder', uri);
-                    }
+    }
 
-                });
-        }
-
-
-
+    private static openGeneratedOperator(operatorName: string | undefined, operatorPath: string): void | PromiseLike<void> {
+        return vscode.window.showInformationMessage("Operator created:" + operatorName, ...['open'])
+            .then(async (selection) => {
+                if (selection === 'open') {
+                    Operator.getInstance().path = operatorPath + operatorName;
+                    console.log("path:" + Operator.getInstance().path);
+                    let uri = Uri.file(Operator.getInstance().path);
+                    let suc = await vscode.commands.executeCommand('vscode.openFolder', uri);
+                }
+            });
     }
 
     private static async getOperatorDefaultPath() {
