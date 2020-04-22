@@ -1,4 +1,4 @@
-# vscode-operator-sdk 
+# vscode-operator-sdk (This project is WIP)
 
 VS Code plugin for [operator-sdk](https://github.com/operator-framework/operator-sdk)
 
