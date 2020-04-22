@@ -22,7 +22,11 @@ export class Progress {
                 },
                 async (progress: vscode.Progress<{increment: number, message: string}>, token: vscode.CancellationToken) => {
                     const result = await Cli.getInstance().execute(cmd);
-                    result.stderr ? reject(result.stderr) : resolve(result);
+                    if (result.error === null) {
+                        resolve(result);
+                    } else {
+                        reject(result.error);
+                    }
                 }
             );
         });
