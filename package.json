@@ -110,7 +110,7 @@
 				"command": "operatorsdk.olm",
 				"title": "olm",
 				"category": "Operator-sdk"
-			}
+			},
 			{
 				"command": "operatorsdk.scorecard",
 				"title": "scorecard",
