@@ -61,25 +61,17 @@ export class OperatorSdk {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();
         }
-
         const OPSDK_GEN = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk generate ` + type;
-        const result = await Cli.getInstance().execute(OPSDK_GEN);
-
-        if (result.error !== null) {
-            vscode.window.showErrorMessage(result.stderr);
-        } else {
-            vscode.window.showInformationMessage("Generated:" + type);
-        }
-
+        Progress.execCmd("generate:"+type, OPSDK_GEN)
+        .then((result) => vscode.window.showInformationMessage("Generated:" + type))
+        .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
     static async add(type: string): Promise<any> {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();
-
         }
-
         const options: InputBoxOptions[] = [{
             prompt: "Enter the Kind",
             placeHolder: "Memcached"
@@ -92,15 +84,9 @@ export class OperatorSdk {
         const kind = await vscode.window.showInputBox(options[0]);
         const version = await vscode.window.showInputBox(options[1]);
         const OPSDK_ADD = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
-        const result = await Cli.getInstance().execute(OPSDK_ADD);
-
-        if (result.error !== null) {
-            vscode.window.showErrorMessage(result.stderr);
-        } else {
-            vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind);
-        }
-
-
+        Progress.execCmd("add:"+type,OPSDK_ADD)
+        .then((result) =>vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind) )
+        .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 

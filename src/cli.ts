@@ -31,7 +31,7 @@ export class Cli implements Commands {
 
    async execute(cmd: string, opts?: childProcess.ExecOptions): Promise<CMDResponse> {
         return new Promise<CMDResponse>(async (resolve, reject) => {
-            Terminal.showOutput(cmd);
+          //  Terminal.showOutput(cmd);
             childProcess.exec(cmd, (error: ExecException | null, stdout: string, stderr: string) => { 
                 resolve({error, stdout, stderr});
             });

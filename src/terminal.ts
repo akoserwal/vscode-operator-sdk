@@ -22,7 +22,7 @@ export class Terminal {
 
 
 	static async showOutput(output: string) {
-		const terminal = this.getInstance()
+		const terminal = this.getInstance();
 		if (Terminal.ensureTerminalExists()) {
 			if (terminal) {
 				terminal.show(true);
