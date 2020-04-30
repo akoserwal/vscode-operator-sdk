@@ -10,6 +10,27 @@ import { Progress } from "./progress";
 
 
 export class OperatorSdk {
+    static cleanup(cleanup: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static migrate(migrate: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static scorecard(scorecard: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static olm(olm: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static test(test: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static bundle(bundle: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static build(build: any): any {
+        throw new Error("Method not implemented.");
+    }
 
 
     static async printDeps(printDeps: any): Promise<any> {

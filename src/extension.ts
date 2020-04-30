@@ -21,6 +21,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('operatorsdk.run',  () => execute(OperatorSdk.run)),
         vscode.commands.registerCommand('operatorsdk.setpath',  () => execute(OperatorSdk.setOperatorPath)),
         vscode.commands.registerCommand('operatorsdk.printdeps',  () => execute(OperatorSdk.printDeps)),
+        vscode.commands.registerCommand('operatorsdk.build',  () => execute(OperatorSdk.build)),
+        vscode.commands.registerCommand('operatorsdk.bundle',  () => execute(OperatorSdk.bundle)),
+        vscode.commands.registerCommand('operatorsdk.test',  () => execute(OperatorSdk.test)),
+        vscode.commands.registerCommand('operatorsdk.olm',  () => execute(OperatorSdk.olm)),
+        vscode.commands.registerCommand('operatorsdk.scorecard',  () => execute(OperatorSdk.scorecard)),
+        vscode.commands.registerCommand('operatorsdk.migrate',  () => execute(OperatorSdk.migrate)),
+        vscode.commands.registerCommand('operatorsdk.cleanup',  () => execute(OperatorSdk.cleanup)),
         
 	];
 
