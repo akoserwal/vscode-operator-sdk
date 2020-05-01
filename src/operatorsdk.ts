@@ -25,42 +25,80 @@ export class OperatorSdk {
     static test(test: any): any {
         throw new Error("Method not implemented.");
     }
-    static bundle(bundle: any): any {
-        throw new Error("Method not implemented.");
+
+    static async bundle(bundleType: any): Promise<any> {
+        await OperatorSdk.isValidInstance();
+        let flag: string | undefined;
+        if (bundleType === "create") {
+            const opflag: InputBoxOptions[] = [{
+                prompt: "directory",
+                placeHolder: "./deploy/olm-catalog/test-operator/0.1.0 "
+            }, {
+                prompt: "package",
+                placeHolder: "test-operator"
+            }, {
+                prompt: "channels",
+                placeHolder: "beta"
+            },
+            {
+                prompt: "default-channel",
+                placeHolder: "beta"
+            }];
+            const directory = await vscode.window.showInputBox(opflag[0]);
+            const packOp = await vscode.window.showInputBox(opflag[1]);
+            const channels = await vscode.window.showInputBox(opflag[2]);
+            const defChannels = await vscode.window.showInputBox(opflag[3]);
+            flag = "--directory" + directory + "--package" + packOp + "--channels" + channels + "--default-channel" + defChannels;
+        } else {
+            const opImage = {
+                prompt: "validation image",
+                placeHolder: "quay.io/example/test-operator:v0.1.0",
+            };
+            flag = await vscode.window.showInputBox(opImage);
+        }
+        const OPSDK_Bundle = OperatorSdk.getOperatorDir() + `operator-sdk bundle ` + bundleType + flag;
+        Progress.execCmd("Bundle:" + bundleType, OPSDK_Bundle)
+            .then((result) => vscode.window.showInformationMessage("Generated bundle:" + bundleType + result))
+            .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
-    static async build(): Promise<any> {
-        if (Operator.getInstance().path === undefined) {
-            await OperatorSdk.setOpPAth();
-        }
+    private static getOperatorDir() {
+        return `cd ` + Operator.getInstance().path + ' && ';
+    }
 
+    static async build(): Promise<any> {
+        await OperatorSdk.isValidInstance();
         const opImage: InputBoxOptions = {
             prompt: "Enter the image name",
             placeHolder: "quay.io/example/operator:v0.0.1",
         };
-        const imageName =await vscode.window.showInputBox(opImage);
+        const imageName = await vscode.window.showInputBox(opImage);
         console.log(imageName)
-        const OPSDK_BUILD = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk build ` + imageName;
+        const OPSDK_BUILD = OperatorSdk.getOperatorDir() + `operator-sdk build ` + imageName;
         console.log(OPSDK_BUILD);
-        Progress.execCmd("Building image:"+imageName,OPSDK_BUILD)
-        .then((result) => vscode.window.showInformationMessage("image generated"))
-        .catch((error) => vscode.window.showErrorMessage(error));
+        Progress.execCmd("Building image:" + imageName, OPSDK_BUILD)
+            .then((result) => vscode.window.showInformationMessage("image generated"))
+            .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
-    static async printDeps(printDeps: any): Promise<any> {
+    private static async isValidInstance() {
         if (Operator.getInstance().path === undefined) {
             await OperatorSdk.setOpPAth();
         }
-        const OPSDK_PRINT_DEPS = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk print-deps`;
+    }
+
+    static async printDeps(printDeps: any): Promise<any> {
+        await OperatorSdk.isValidInstance();
+        const OPSDK_PRINT_DEPS = OperatorSdk.getOperatorDir() + `operator-sdk print-deps`;
         const result = await Cli.getInstance().execute(OPSDK_PRINT_DEPS);
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
         } else {
             vscode.window.showInformationMessage(result.stdout);
         }
-    
+
     }
 
 
@@ -73,9 +111,7 @@ export class OperatorSdk {
 
 
     static async run(run: any): Promise<any> {
-        if (Operator.getInstance().path === undefined) {
-            await OperatorSdk.setOpPAth();
-        }
+        await OperatorSdk.isValidInstance();
 
         const op: InputBoxOptions = {
             prompt: "Enter the NAMESPACE",
@@ -83,7 +119,7 @@ export class OperatorSdk {
         };
         const namespace = await vscode.window.showInputBox(op);
 
-        const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk run --local --namespace=` + namespace);
+        const result = await Cli.getInstance().execute(OperatorSdk.getOperatorDir() + `operator-sdk run --local --namespace=` + namespace);
         //operator-sdk up local --namespace=default
         if (result.error !== null) {
             vscode.window.showErrorMessage(result.stderr);
@@ -95,20 +131,16 @@ export class OperatorSdk {
 
 
     static async generate(type: string): Promise<any> {
-        if (Operator.getInstance().path === undefined) {
-            await OperatorSdk.setOpPAth();
-        }
-        const OPSDK_GEN = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk generate ` + type;
-        Progress.execCmd("generate:"+type, OPSDK_GEN)
-        .then((result) => vscode.window.showInformationMessage("Generated:" + type))
-        .catch((error) => vscode.window.showErrorMessage(error));
+        await OperatorSdk.isValidInstance();
+        const OPSDK_GEN = OperatorSdk.getOperatorDir() + `operator-sdk generate ` + type;
+        Progress.execCmd("generate:" + type, OPSDK_GEN)
+            .then((result) => vscode.window.showInformationMessage("Generated:" + type))
+            .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
     static async add(type: string): Promise<any> {
-        if (Operator.getInstance().path === undefined) {
-            await OperatorSdk.setOpPAth();
-        }
+        await OperatorSdk.isValidInstance();
         const options: InputBoxOptions[] = [{
             prompt: "Enter the Kind",
             placeHolder: "Memcached"
@@ -120,10 +152,10 @@ export class OperatorSdk {
         }];
         const kind = await vscode.window.showInputBox(options[0]);
         const version = await vscode.window.showInputBox(options[1]);
-        const OPSDK_ADD = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
-        Progress.execCmd("add:"+type,OPSDK_ADD)
-        .then((result) =>vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind) )
-        .catch((error) => vscode.window.showErrorMessage(error));
+        const OPSDK_ADD = OperatorSdk.getOperatorDir() + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
+        Progress.execCmd("add:" + type, OPSDK_ADD)
+            .then((result) => vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind))
+            .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
@@ -156,10 +188,10 @@ export class OperatorSdk {
         }
         const cmd = `cd ` + operatorPath + ' && ' + `operator-sdk new ` + operatorName;
 
-       Progress.execCmd("creating new operator:"+operatorName, cmd)
-       .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPath)
-       ).catch((error) => vscode.window.showErrorMessage(error)
-       );
+        Progress.execCmd("creating new operator:" + operatorName, cmd)
+            .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPath)
+            ).catch((error) => vscode.window.showErrorMessage(error)
+            );
 
     }
 

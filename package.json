@@ -29,7 +29,8 @@
 		"onCommand:operatorsdk.printdeps",
 		"onCommand:operatorsdk.build",
 		"onCommand:operatorsdk.test",
-		"onCommand:operatorsdk.bundle",
+		"onCommand:operatorsdk.bundleCreate",
+		"onCommand:operatorsdk.bundleValidate",
 		"onCommand:operatorsdk.scorecard",
 		"onCommand:operatorsdk.olm",
 		"onCommand:operatorsdk.migrate",
@@ -99,8 +100,13 @@
 				"category": "Operator-sdk"
 			},
 			{
-				"command": "operatorsdk.bundle",
-				"title": "bundle",
+				"command": "operatorsdk.bundleCreate",
+				"title": "bundle create",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.bundleValidate",
+				"title": "bundle validate",
 				"category": "Operator-sdk"
 			},
 			{
