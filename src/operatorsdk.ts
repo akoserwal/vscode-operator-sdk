@@ -74,7 +74,7 @@ export class OperatorSdk {
             placeHolder: "quay.io/example/operator:v0.0.1",
         };
         const imageName = await vscode.window.showInputBox(opImage);
-        console.log(imageName)
+        console.log(imageName);
         const OPSDK_BUILD = OperatorSdk.getOperatorDir() + `operator-sdk build ` + imageName;
         console.log(OPSDK_BUILD);
         Progress.execCmd("Building image:" + imageName, OPSDK_BUILD)
