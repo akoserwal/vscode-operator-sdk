@@ -28,8 +28,24 @@ export class OperatorSdk {
     static bundle(bundle: any): any {
         throw new Error("Method not implemented.");
     }
-    static build(build: any): any {
-        throw new Error("Method not implemented.");
+
+
+    static async build(): Promise<any> {
+        if (Operator.getInstance().path === undefined) {
+            await OperatorSdk.setOpPAth();
+        }
+
+        const opImage: InputBoxOptions = {
+            prompt: "Enter the image name",
+            placeHolder: "quay.io/example/operator:v0.0.1",
+        };
+        const imageName =await vscode.window.showInputBox(opImage);
+        console.log(imageName)
+        const OPSDK_BUILD = `cd ` + Operator.getInstance().path + ' && ' + `operator-sdk build ` + imageName;
+        console.log(OPSDK_BUILD);
+        Progress.execCmd("Building image:"+imageName,OPSDK_BUILD)
+        .then((result) => vscode.window.showInformationMessage("image generated"))
+        .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
@@ -65,7 +81,7 @@ export class OperatorSdk {
             prompt: "Enter the NAMESPACE",
             placeHolder: "namespace",
         };
-        const namespace = vscode.window.showInputBox();
+        const namespace = await vscode.window.showInputBox(op);
 
         const result = await Cli.getInstance().execute(`cd ` + Operator.getInstance().path + ' && ' + `operator-sdk run --local --namespace=` + namespace);
         //operator-sdk up local --namespace=default

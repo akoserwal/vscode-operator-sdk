@@ -26,7 +26,14 @@
 		"onCommand:operatorsdk.generateOpenapi",
 		"onCommand:operatorsdk.run",
 		"onCommand:operatorsdk.setpath",
-		"onCommand:operatorsdk.printdeps"
+		"onCommand:operatorsdk.printdeps",
+		"onCommand:operatorsdk.build",
+		"onCommand:operatorsdk.test",
+		"onCommand:operatorsdk.bundle",
+		"onCommand:operatorsdk.scorecard",
+		"onCommand:operatorsdk.olm",
+		"onCommand:operatorsdk.migrate",
+		"onCommand:operatorsdk.cleanup"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

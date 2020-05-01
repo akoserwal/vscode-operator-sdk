@@ -25,7 +25,7 @@ export class Progress {
                     if (result.error === null) {
                         resolve(result);
                     } else {
-                        reject(result.error);
+                        reject(result.stderr);
                     }
                 }
             );
