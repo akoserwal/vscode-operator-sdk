@@ -24,6 +24,7 @@
 		"onCommand:operatorsdk.addCRD",
 		"onCommand:operatorsdk.generateK8s",
 		"onCommand:operatorsdk.generateOpenapi",
+		"onCommand:operatorsdk.generateCrds",
 		"onCommand:operatorsdk.run",
 		"onCommand:operatorsdk.setpath",
 		"onCommand:operatorsdk.printdeps",
@@ -72,6 +73,11 @@
 			{
 				"command": "operatorsdk.generateOpenapi",
 				"title": "Generate Openapi",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.generateCrds",
+				"title": "Generate Crds",
 				"category": "Operator-sdk"
 			},
 			{
