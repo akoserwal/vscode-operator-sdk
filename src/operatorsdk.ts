@@ -6,7 +6,7 @@ import { InputBoxOptions, Uri } from "vscode";
 import { Cli } from "./cli";
 import { Operator } from "./operator";
 import { Progress } from "./progress";
-
+import * as fs from 'fs';
 
 
 export class OperatorSdk {
@@ -174,32 +174,72 @@ export class OperatorSdk {
     }
 
     static async newOperator(newOperator: any): Promise<any> {
-        const operatorPath = await OperatorSdk.getOperatorDefaultPath();
+        const operatorGoPath = await OperatorSdk.getOperatorDefaultPath();
+        let goPathFlag = false;
 
-        let opt: InputBoxOptions = {
-            prompt: "Enter the new operator name & operator will be created at location:" + operatorPath,
-            placeHolder: "github.com/name-operator"
+        let opt: InputBoxOptions[] = [{
+            prompt: "Enter the location where you want to create the operator",
+            value: operatorGoPath+"github.com/<operator-dir>/"
+        }, {
+            prompt: "Enter the repo name & operator name",
+            placeHolder: "github.com/<user>/<operator-name>",
+            value: "github.com/<user>/<operator-name>"
+        }];
 
-        };
+        
+        let operatorPathInput = await vscode.window.showInputBox(opt[0]);
+        const operatorInput = await vscode.window.showInputBox(opt[1]);
+        var opa: string[] | undefined = operatorInput?.split("/");
+        var operatorName = "";
+        if (opa !== undefined) {
+            operatorName = opa[2];
+        }
 
-        const operatorName = await vscode.window.showInputBox(opt);
+        if (operatorPathInput !== undefined) {
+            const oplen = operatorGoPath.length;
+            const res = operatorGoPath.localeCompare(operatorPathInput.slice(0, oplen));
+            if (res === 0) {
+                goPathFlag = true;
+            }
+
+            let opPathLen = operatorPathInput.length;
+            if ("/" !== operatorPathInput.slice(opPathLen-1,  opPathLen)){
+                operatorPathInput =  operatorPathInput + "/";
+            }
+
+            ToolsConfig.checkDirectory(operatorPathInput);
+        }
+
         if (operatorName) {
             Operator.getInstance().name = operatorName;
         }
-        const cmd = `cd ` + operatorPath + ' && ' + `operator-sdk new ` + operatorName;
 
+
+        let cmd = OperatorSdk.getNewCMD(goPathFlag, operatorPathInput, operatorName, operatorInput);
+     
         Progress.execCmd("creating new operator:" + operatorName, cmd)
-            .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPath)
+            .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPathInput)
             ).catch((error) => vscode.window.showErrorMessage(error)
             );
 
     }
 
-    private static openGeneratedOperator(operatorName: string | undefined, operatorPath: string): void | PromiseLike<void> {
+    private static getNewCMD(goPathFlag: boolean, operatorPathInput: string | undefined, operatorName: string, operatorInput: string | undefined) {
+        let cmd = "";
+        if (goPathFlag) {
+            cmd = `cd ` + operatorPathInput + ' && ' + `operator-sdk new ` + operatorName;
+        }
+        else {
+            cmd = `cd ` + operatorPathInput + ' && ' + `GO111MODULE=on operator-sdk new ` + operatorName + ` --repo ` + operatorInput;
+        }
+        return cmd;
+    }
+
+    private static openGeneratedOperator(operatorName: string, operatorPathInput: string | undefined): void | PromiseLike<void> {
         return vscode.window.showInformationMessage("Operator created:" + operatorName, ...['open'])
             .then(async (selection) => {
                 if (selection === 'open') {
-                    Operator.getInstance().path = operatorPath + operatorName;
+                    Operator.getInstance().path = operatorPathInput + operatorName;
                     console.log("path:" + Operator.getInstance().path);
                     let uri = Uri.file(Operator.getInstance().path);
                     let suc = await vscode.commands.executeCommand('vscode.openFolder', uri);
