@@ -1,3 +1,8 @@
+/*-----------------------------------------------------------------------------------------------
+ *  Copyright (c) Red Hat, Inc. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE file in the project root for license information.
+ *-----------------------------------------------------------------------------------------------*/
+
 'use strict';
 
 import * as vscode from 'vscode';
@@ -12,10 +17,11 @@ export class Terminal {
 		}
 		return true;
 	}
+	
 
 	static getInstance() {
 		if (!Terminal.terminal) {
-			Terminal.terminal = vscode.window.createTerminal();
+			Terminal.terminal = vscode.window.createTerminal("operator-sdk");
 		}
 		return Terminal.terminal;
 	}
@@ -25,9 +31,8 @@ export class Terminal {
 		const terminal = this.getInstance();
 		if (Terminal.ensureTerminalExists()) {
 			if (terminal) {
+				await terminal.sendText(output, true);
 				terminal.show(true);
-				await terminal.sendText(output, false);
-
 			}
 		}
 	}

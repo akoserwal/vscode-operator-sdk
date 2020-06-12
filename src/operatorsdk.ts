@@ -1,12 +1,18 @@
+/*-----------------------------------------------------------------------------------------------
+ *  Copyright (c) Red Hat, Inc. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE file in the project root for license information.
+ *-----------------------------------------------------------------------------------------------*/
+
 'use strict';
 
-import { ToolsConfig } from "./tools";
+import { ToolsConfig } from "./util/tools";
 import * as vscode from 'vscode';
 import { InputBoxOptions, Uri } from "vscode";
 import { Cli } from "./cli";
 import { Operator } from "./operator";
-import { Progress } from "./progress";
+import { Progress } from "./util/progress";
 import * as fs from 'fs';
+import { Terminal } from "./util/terminal";
 
 
 export class OperatorSdk {
@@ -118,15 +124,7 @@ export class OperatorSdk {
             placeHolder: "namespace",
         };
         const namespace = await vscode.window.showInputBox(op);
-
-        const result = await Cli.getInstance().execute(OperatorSdk.getOperatorDir() + `operator-sdk run --local --namespace=` + namespace);
-        //operator-sdk up local --namespace=default
-        if (result.error !== null) {
-            vscode.window.showErrorMessage(result.stderr);
-        } else {
-            vscode.window.showInformationMessage("Runing");
-        }
-
+        Terminal.showOutput(OperatorSdk.getOperatorDir() + `operator-sdk run --local --watch-namespace=` + namespace);
     }
 
 
@@ -154,7 +152,7 @@ export class OperatorSdk {
         const version = await vscode.window.showInputBox(options[1]);
         const OPSDK_ADD = OperatorSdk.getOperatorDir() + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
         Progress.execCmd("add:" + type, OPSDK_ADD)
-            .then((result) => vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind))
+            .then((result) =>  vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind))
             .catch((error) => vscode.window.showErrorMessage(error));
     }
 

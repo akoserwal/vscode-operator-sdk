@@ -1,8 +1,14 @@
-'use strict';
+/*-----------------------------------------------------------------------------------------------
+ *  Copyright (c) Red Hat, Inc. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE file in the project root for license information.
+ *-----------------------------------------------------------------------------------------------*/
+
+ 'use strict';
 
 import * as vscode from 'vscode';
-import { Cli } from "./cli";
+import { Cli } from "../cli";
 import { ProgressOptions } from 'vscode';
+import { Terminal } from './terminal';
 
 export interface Step {
     command: string;
@@ -20,7 +26,7 @@ export class Progress {
                     location: vscode.ProgressLocation.Notification,
                     title
                 },
-                async (progress: vscode.Progress<{increment: number, message: string}>, token: vscode.CancellationToken) => {
+                async (progress: vscode.Progress<{increment: number, message: string}>, token: vscode.CancellationToken) => { 
                     const result = await Cli.getInstance().execute(cmd);
                     if (result.error === null) {
                         resolve(result);

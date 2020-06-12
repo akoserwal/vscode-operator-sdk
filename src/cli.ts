@@ -3,7 +3,7 @@
 import * as childProcess from 'child_process';
 import * as vscode from 'vscode';
 import { ExecException, ExecOptions } from 'child_process';
-import { Terminal } from './terminal';
+import { Terminal } from './util/terminal';
 
 
 export interface CMDResponse {
@@ -31,8 +31,10 @@ export class Cli implements Commands {
 
    async execute(cmd: string, opts?: childProcess.ExecOptions): Promise<CMDResponse> {
         return new Promise<CMDResponse>(async (resolve, reject) => {
-          //  Terminal.showOutput(cmd);
             childProcess.exec(cmd, (error: ExecException | null, stdout: string, stderr: string) => { 
+                if(error) {
+                    reject(error);
+                }
                 resolve({error, stdout, stderr});
             });
 

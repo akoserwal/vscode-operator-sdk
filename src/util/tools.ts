@@ -1,8 +1,13 @@
+/*-----------------------------------------------------------------------------------------------
+ *  Copyright (c) Red Hat, Inc. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE file in the project root for license information.
+ *-----------------------------------------------------------------------------------------------*/
+
 import { which } from "shelljs";
 import * as childProcess from 'child_process';
 import { ExecException, ExecOptions } from 'child_process';
 import { ColorPresentation } from "vscode";
-import { Cli } from './cli';
+import { Cli } from '../cli';
 import * as fs from 'fs';
 import * as path from 'path';
 
