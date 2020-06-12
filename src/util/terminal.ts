@@ -27,7 +27,7 @@ export class Terminal {
 	}
 
 
-	static async showOutput(output: string) {
+	static async execInTerminal(output: string) {
 		const terminal = this.getInstance();
 		if (Terminal.ensureTerminalExists()) {
 			if (terminal) {

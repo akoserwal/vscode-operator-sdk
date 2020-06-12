@@ -124,7 +124,7 @@ export class OperatorSdk {
             placeHolder: "namespace",
         };
         const namespace = await vscode.window.showInputBox(op);
-        Terminal.showOutput(OperatorSdk.getOperatorDir() + `operator-sdk run --local --watch-namespace=` + namespace);
+        Terminal.execInTerminal(OperatorSdk.getOperatorDir() + `operator-sdk run --local --watch-namespace=` + namespace);
     }
 
 
