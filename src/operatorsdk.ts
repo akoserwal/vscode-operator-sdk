@@ -62,12 +62,16 @@ export class OperatorSdk {
             };
             flag = await vscode.window.showInputBox(opImage);
         }
-        const OPSDK_Bundle = OperatorSdk.getOperatorDir() + `operator-sdk bundle ` + bundleType + flag;
+        const OPSDK_Bundle = OperatorSdk.getOperatorDir() + OperatorSdk.getBundleCMD(bundleType, flag);
         Progress.execCmd("Bundle:" + bundleType, OPSDK_Bundle)
             .then((result) => vscode.window.showInformationMessage("Generated bundle:" + bundleType + result))
             .catch((error) => vscode.window.showErrorMessage(error));
     }
 
+
+    private static getBundleCMD(bundleType: string, flag: string | undefined) {
+        return `operator-sdk bundle ` + bundleType + flag;
+    }
 
     private static getOperatorDir() {
         return `cd ` + Operator.getInstance().path + ' && ';
@@ -81,13 +85,17 @@ export class OperatorSdk {
         };
         const imageName = await vscode.window.showInputBox(opImage);
         console.log(imageName);
-        const OPSDK_BUILD = OperatorSdk.getOperatorDir() + `operator-sdk build ` + imageName;
+        const OPSDK_BUILD = OperatorSdk.getOperatorDir() + OperatorSdk.getBuildCMD(imageName);
         console.log(OPSDK_BUILD);
         Progress.execCmd("Building image:" + imageName, OPSDK_BUILD)
             .then((result) => vscode.window.showInformationMessage("image generated"))
             .catch((error) => vscode.window.showErrorMessage(error));
     }
 
+
+    private static getBuildCMD(imageName: string | undefined) {
+        return `operator-sdk build ` + imageName;
+    }
 
     private static async isValidInstance() {
         if (Operator.getInstance().path === undefined) {
@@ -97,17 +105,13 @@ export class OperatorSdk {
 
     static async printDeps(printDeps: any): Promise<any> {
         await OperatorSdk.isValidInstance();
-        const OPSDK_PRINT_DEPS = OperatorSdk.getOperatorDir() + `operator-sdk print-deps`;
-        const result = await Cli.getInstance().execute(OPSDK_PRINT_DEPS);
-        if (result.error !== null) {
-            vscode.window.showErrorMessage(result.stderr);
-        } else {
-            vscode.window.showInformationMessage(result.stdout);
-        }
-
+        const OPSDK_PRINT_DEPS = OperatorSdk.getOperatorDir() + OperatorSdk.getPrintDepCMD();
+        Terminal.execInTerminal(OPSDK_PRINT_DEPS);
     }
 
-
+    private static getPrintDepCMD() {
+        return `operator-sdk print-deps`;
+    }
 
     static async setOperatorPath(setOperatorPath: any): Promise<any> {
         if (Operator.getInstance().path === undefined) {
@@ -124,18 +128,26 @@ export class OperatorSdk {
             placeHolder: "namespace",
         };
         const namespace = await vscode.window.showInputBox(op);
-        Terminal.execInTerminal(OperatorSdk.getOperatorDir() + `operator-sdk run --local --watch-namespace=` + namespace);
+        Terminal.execInTerminal(OperatorSdk.getOperatorDir() + OperatorSdk.getRunCMD(namespace));
     }
 
 
+    private static getRunCMD(namespace: string | undefined) {
+        return `operator-sdk run --local --watch-namespace=` + namespace;
+    }
+
     static async generate(type: string): Promise<any> {
         await OperatorSdk.isValidInstance();
-        const OPSDK_GEN = OperatorSdk.getOperatorDir() + `operator-sdk generate ` + type;
+        const OPSDK_GEN = OperatorSdk.getOperatorDir() + OperatorSdk.getGenerateCMD(type);
         Progress.execCmd("generate:" + type, OPSDK_GEN)
             .then((result) => vscode.window.showInformationMessage("Generated:" + type))
             .catch((error) => vscode.window.showErrorMessage(error));
     }
 
+
+    private static getGenerateCMD(type: string) {
+        return `operator-sdk generate ` + type;
+    }
 
     static async add(type: string): Promise<any> {
         await OperatorSdk.isValidInstance();
@@ -150,13 +162,17 @@ export class OperatorSdk {
         }];
         const kind = await vscode.window.showInputBox(options[0]);
         const version = await vscode.window.showInputBox(options[1]);
-        const OPSDK_ADD = OperatorSdk.getOperatorDir() + `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
+        const OPSDK_ADD = OperatorSdk.getOperatorDir() + OperatorSdk.getAddCMD(type, version, kind);
         Progress.execCmd("add:" + type, OPSDK_ADD)
-            .then((result) =>  vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind))
+            .then((result) => vscode.window.showInformationMessage("Generated:" + type + " for kind:" + kind))
             .catch((error) => vscode.window.showErrorMessage(error));
     }
 
 
+
+    private static getAddCMD(type: string | undefined, version: string | undefined, kind: string | undefined) {
+        return `operator-sdk add ` + type + ` --api-version=` + version + ` --kind=` + kind;
+    }
 
     private static async setOpPAth() {
         const defPath = await this.getOperatorDefaultPath();
@@ -177,14 +193,14 @@ export class OperatorSdk {
 
         let opt: InputBoxOptions[] = [{
             prompt: "Enter the location where you want to create the operator",
-            value: operatorGoPath+"github.com/<operator-dir>/"
+            value: operatorGoPath + "github.com/<operator-dir>/"
         }, {
             prompt: "Enter the repo name & operator name",
             placeHolder: "github.com/<user>/<operator-name>",
             value: "github.com/<user>/<operator-name>"
         }];
 
-        
+
         let operatorPathInput = await vscode.window.showInputBox(opt[0]);
         const operatorInput = await vscode.window.showInputBox(opt[1]);
         var opa: string[] | undefined = operatorInput?.split("/");
@@ -201,8 +217,8 @@ export class OperatorSdk {
             }
 
             let opPathLen = operatorPathInput.length;
-            if ("/" !== operatorPathInput.slice(opPathLen-1,  opPathLen)){
-                operatorPathInput =  operatorPathInput + "/";
+            if ("/" !== operatorPathInput.slice(opPathLen - 1, opPathLen)) {
+                operatorPathInput = operatorPathInput + "/";
             }
 
             ToolsConfig.checkDirectory(operatorPathInput);
@@ -214,7 +230,7 @@ export class OperatorSdk {
 
 
         let cmd = OperatorSdk.getNewCMD(goPathFlag, operatorPathInput, operatorName, operatorInput);
-     
+
         Progress.execCmd("creating new operator:" + operatorName, cmd)
             .then((result) => OperatorSdk.openGeneratedOperator(operatorName, operatorPathInput)
             ).catch((error) => vscode.window.showErrorMessage(error)
