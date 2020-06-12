@@ -30,6 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('operatorsdk.scorecard',  () => execute(OperatorSdk.scorecard)),
         vscode.commands.registerCommand('operatorsdk.migrate',  () => execute(OperatorSdk.migrate)),
         vscode.commands.registerCommand('operatorsdk.cleanup',  () => execute(OperatorSdk.cleanup)),
+        vscode.commands.registerCommand('operatorsdk.debug',  () => execute(OperatorSdk.debug)),
+        vscode.commands.registerCommand('operatorsdk.debug',  () => execute(OperatorSdk.deploy)),
         
 	];
 

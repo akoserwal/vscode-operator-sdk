@@ -35,7 +35,9 @@
 		"onCommand:operatorsdk.scorecard",
 		"onCommand:operatorsdk.olm",
 		"onCommand:operatorsdk.migrate",
-		"onCommand:operatorsdk.cleanup"
+		"onCommand:operatorsdk.cleanup",
+		"onCommand::operator-sdk.debug",
+		"onCommand::operator-sdk.deploy"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -133,6 +135,16 @@
 			{
 				"command": "operatorsdk.scorecard",
 				"title": "scorecard",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.debug",
+				"title": "debug",
+				"category": "Operator-sdk"
+			},
+			{
+				"command": "operatorsdk.deploy",
+				"title": "deploy",
 				"category": "Operator-sdk"
 			}
 		]

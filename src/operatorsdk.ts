@@ -16,6 +16,12 @@ import { Terminal } from "./util/terminal";
 
 
 export class OperatorSdk {
+    static deploy(deploy: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static debug(debug: any): any {
+        throw new Error("Method not implemented.");
+    }
     static cleanup(cleanup: any): any {
         throw new Error("Method not implemented.");
     }
